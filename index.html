@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PixelCraft - Minecraft Sunucusu</title>
+  <style>
+    :root{
+      --bg:#0d1117;
+      --bg2:#111827;
+      --card:#161b22;
+      --muted:#9ca3af;
+      --text:#e5e7eb;
+      --accent:#22c55e;
+      --accent2:#60a5fa;
+      --danger:#ef4444;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: radial-gradient(1200px 700px at 0% -10%, #1f2937 0%, transparent 55%),
+                  radial-gradient(900px 500px at 100% 0%, #0f172a 0%, transparent 55%),
+                  linear-gradient(180deg,#0b0f14,#0d1117 35%, #0a0f14);
+      color:var(--text);
+      line-height:1.6;
+    }
+    .container{width:min(1120px,92%);margin:auto}
+    .glass{
+      background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
+      border:1px solid rgba(255,255,255,.08);
+      backdrop-filter: blur(8px);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    header{
+      position:sticky;top:0;z-index:1000;
+      background:rgba(13,17,23,.85);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:12px 0;
+      gap:16px;
+    }
+    .logo{
+      display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.4px;
+    }
+    .logo .cube{
+      width:18px;height:18px;border-radius:4px;
+      background:linear-gradient(145deg,#22c55e,#16a34a);
+      box-shadow:0 0 0 3px rgba(34,197,94,.2);
+    }
+    .menu{display:flex;flex-wrap:wrap;gap:8px}
+    .menu a{
+      color:var(--text);text-decoration:none;
+      padding:8px 12px;border-radius:10px;
+      border:1px solid transparent;
+      transition:.25s;
+      font-size:.95rem;
+    }
+    .menu a:hover{border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.03)}
+    .hero{
+      padding:72px 0 36px;
+      text-align:center;
+    }
+    .hero .badge{
+      display:inline-block;
+      padding:6px 12px;border-radius:999px;
+      border:1px solid rgba(96,165,250,.35);
+      color:#bfdbfe;background:rgba(59,130,246,.08);
+      font-size:.82rem;margin-bottom:14px;
+    }
+    h1{
+      font-size:clamp(2rem,6vw,3.7rem);
+      margin:.2em 0 .2em;
+      line-height:1.15;
+      text-shadow:0 8px 35px rgba(34,197,94,.25);
+    }
+    .ip-card{
+      display:inline-flex;gap:10px;align-items:center;
+      padding:10px 12px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(17,24,39,.7);
+      margin:8px 0 16px;
+      flex-wrap:wrap;justify-content:center;
+    }
+    code{font-weight:700;color:#86efac}
+    .btn{
+      border:0;cursor:pointer;
+      padding:11px 16px;border-radius:12px;
+      font-weight:700;transition:.25s;
+    }
+    .btn-primary{
+      color:#03210f;
+      background:linear-gradient(135deg,#22c55e,#4ade80);
+      box-shadow:0 10px 24px rgba(34,197,94,.35);
+    }
+    .btn-primary:hover{transform:translateY(-1px);filter:brightness(1.05)}
+    .btn-secondary{
+      color:var(--text);
+      background:linear-gradient(135deg,#1f2937,#374151);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .lead{max-width:760px;margin:16px auto 0;color:#d1d5db}
+    section{padding:34px 0}
+    .grid{
+      display:grid;gap:18px;
+      grid-template-columns:repeat(12,1fr);
+    }
+    .card{padding:18px}
+    .span-6{grid-column:span 6}
+    .span-4{grid-column:span 4}
+    .span-8{grid-column:span 8}
+    .span-12{grid-column:span 12}
+    h2{margin:0 0 10px;font-size:1.6rem}
+    h3{margin:.2em 0 .4em}
+    p{margin:.4em 0}
+    .muted{color:var(--muted)}
+    .list{margin:0;padding-left:18px}
+    .pill{
+      display:inline-block;margin:4px 8px 0 0;padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.03);
+      font-size:.84rem
+    }
+    .faq-item{
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:12px;
+      margin:10px 0;
+      overflow:hidden;
+    }
+    .faq-q{
+      width:100%;
+      text-align:left;
+      background:rgba(255,255,255,.02);
+      color:var(--text);
+      border:0;
+      padding:12px 14px;
+      font-weight:600;
+      cursor:pointer;
+    }
+    .faq-a{display:none;padding:0 14px 12px;color:#cbd5e1}
+    form{display:grid;gap:10px}
+    input,textarea,select{
+      width:100%;
+      background:#0b1220;
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--text);
+      padding:10px 12px;border-radius:10px;
+      outline:none;
+    }
+    input:focus,textarea:focus,select:focus{border-color:#60a5fa}
+    textarea{min-height:90px;resize:vertical}
+    .market{
+      display:grid;gap:14px;grid-template-columns:repeat(3,1fr)
+    }
+    .package{padding:16px}
+    .price{font-size:1.6rem;font-weight:800;color:#86efac}
+    .footer{
+      margin-top:24px;padding:22px 0;color:#94a3b8;border-top:1px solid rgba(255,255,255,.08)
+    }
+    .notice{
+      border-left:4px solid #f59e0b;
+      background:rgba(245,158,11,.08);
+      padding:10px 12px;border-radius:8px;
+      color:#fcd34d;
+    }
+    .small{font-size:.9rem}
+    @media (max-width: 900px){
+      .span-6,.span-8,.span-4{grid-column:span 12}
+      .market{grid-template-columns:1fr}
+      .menu{display:none}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="logo"><span class="cube"></span> PixelCraft</div>
+      <nav class="menu">
+        <a href="#anasayfa">Ana Sayfa</a>
+        <a href="#rehber">Rehber</a>
+        <a href="#kurallar">Kurallar</a>
+        <a href="#yetkili">Yetkili Alımı</a>
+        <a href="#market">Market</a>
+        <a href="#iletisim">İletişim</a>
+        <a href="#sss">SSS</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="anasayfa" class="container">
+    <section class="hero">
+      <span class="badge">Minecraft 1.21.4 • BoxPvP + SMP</span>
+      <h1>PixelCraft Sunucusuna Hoş Geldin</h1>
+      <div class="ip-card">
+        <span>Sunucu IP:</span>
+        <code id="serverIp">pixelcraft-eqjY.aternos.me</code>
+        <button class="btn btn-secondary small" id="copyIpBtn">Kopyala</button>
+      </div>
+      <div>
+        <a class="btn btn-primary" href="#rehber">Hemen Katıl</a>
+      </div>
+      <p class="lead">
+        PixelCraft’ta rekabetçi <strong>BoxPvP</strong> sistemi ve klasik <strong>SMP</strong> deneyimi seni bekliyor.
+        Güçlen, takım kur, hayatta kal ve topluluğa katıl!
+      </p>
+      <div style="margin-top:10px">
+        <span class="pill">Sunucu Adı: PixelCraft</span>
+        <span class="pill">Sürüm: 1.21.4</span>
+        <span class="pill">Modlar: BoxPvP, SMP</span>
+      </div>
+    </section>
+
+    <section id="rehber">
+      <div class="grid">
+        <div class="glass card span-6">
+          <h2>Rehber - BoxPvP</h2>
+          <p class="muted">Yeni oyuncular için hızlı başlangıç:</p>
+          <ul class="list">
+            <li>Önce temel setini tamamla, PvP alanına hazırlıksız girme.</li>
+            <li>Kasada birikim yap, riskli savaşlarda tüm eşyayı taşımamaya çalış.</li>
+            <li>Boost ve kit zamanlamasını doğru kullanarak avantaj yakala.</li>
+          </ul>
+        </div>
+        <div class="glass card span-6">
+          <h2>Rehber - SMP</h2>
+          <p class="muted">Klasik hayatta kalma için öneriler:</p>
+          <ul class="list">
+            <li>İlk gün barınak, yiyecek ve temel maden önceliğin olsun.</li>
+            <li>Topluluk alanlarına zarar vermeden ortak kurallara uy.</li>
+            <li>Takım arkadaşlarınla görev paylaş, daha hızlı geliş.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="sss">
+      <div class="glass card">
+        <h2>SSS (Sık Sorulan Sorular)</h2>
+        <div class="faq-item">
+          <button class="faq-q">Sunucuya nasıl girerim?</button>
+          <div class="faq-a">Minecraft 1.21.4 sürümü ile Çok Oyunculu > Sunucu Ekle kısmına <strong>pixelcraft-eqjY.aternos.me</strong> adresini yaz.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Hangi oyun modları var?</button>
+          <div class="faq-a">Sunucuda BoxPvP ve SMP modları aktiftir.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Destek nasıl alırım?</button>
+          <div class="faq-a">İletişim bölümündeki destek formundan bize yazabilirsin.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="kurallar">
+      <div class="glass card">
+        <h2>Kurallar</h2>
+        <ul class="list">
+          <li>Hakaret, küfür, ırkçılık ve toksik davranış yasaktır.</li>
+          <li>Hile, bug abuse ve exploit kullanımı kesinlikle yasaktır.</li>
+          <li>Yetkililerin kararlarına saygı gösterilmelidir.</li>
+          <li>Topluluk yapılarına izinsiz zarar verilmemelidir.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="yetkili">
+      <div class="grid">
+        <div class="glass card span-8">
+          <h2>~Yetkili Alım Başvurusu~</h2>
+          <form id="staffForm">
+            <input required name="Nick" placeholder="Nick:" />
+            <input required name="Yaş" placeholder="Yaş:" />
+            <input required name="Aktiflik" placeholder="Aktifliğin? :" />
+            <textarea required name="Neden" placeholder="Neden yetkili olmak istiyosun:"></textarea>
+            <textarea required name="Sunucular" placeholder="Hangi sunucularda yetkili oldun ve olduysanda kaç kişilik sunucuydu:"></textarea>
+            <textarea required name="Yarar" placeholder="Yetkili olduğun sunucuya ne kadar yararın dokundu:"></textarea>
+            <input required name="Ram" placeholder="Ram basabilirmisin:" />
+            <input required name="Adam" placeholder="Kaç adam cekebilirsin:" />
+            <input required name="Yetki" placeholder="Hangi yetki için geldin (yazılımcı, rehber, moderator vb.) :" />
+            <input required name="Esit" placeholder="Oyunculara eşit davranırmısın:" />
+            <textarea required name="Bilgi" placeholder="Oyunda bir sorun çıktığında bize yardım edebilcek kadar bilgin varmı (örnek: plugin kırmızı görünüyor çalışmıyor gibi):"></textarea>
+            <input required name="Izin" placeholder="Herşeyi izin alarak yaparmısın?:" />
+            <button class="btn btn-primary" type="submit">Başvuruyu Gönder</button>
+          </form>
+          <p class="muted small" style="margin-top:10px">
+            Formu doldurduktan sonra PixelCraft ekibi başvuruyu inceleyip en kısa sürede geri dönüş yapacaktır.
+          </p>
+        </div>
+        <div class="glass card span-4">
+          <h3>Kullanıcı Girişi</h3>
+          <p class="muted small">Nick'ine özel şifre belirle. Sonraki girişlerde aynı nick + aynı şifre zorunludur.</p>
+          <form id="authForm">
+            <input id="authNick" placeholder="Nick" required />
+            <input id="authPass" type="password" placeholder="Şifre" required />
+            <button class="btn btn-secondary" type="submit">Giriş / Kayıt</button>
+          </form>
+          <p id="authState" class="small muted"></p>
+          <hr style="border-color:rgba(255,255,255,.1)">
+          <h3>Admin Girişi</h3>
+          <p class="notice small">Admin: Nick <strong>PixelCraft</strong>, Şifre <strong>pixel123123</strong></p>
+          <form id="adminForm">
+            <input id="adminNick" placeholder="Admin Nick" required />
+            <input id="adminPass" type="password" placeholder="Admin Şifre" required />
+            <button class="btn btn-secondary" type="submit">Admin Paneli Aç</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="market">
+      <div class="glass card">
+        <h2>Market</h2>
+        <p class="muted">Tüm paketlerde özel kit ve özel tag bulunur.</p>
+        <div class="market">
+          <div class="glass package">
+            <h3>VIP</h3>
+            <div class="price">50 TL</div>
+            <p class="muted small">Özel kit + özel tag</p>
+          </div>
+          <div class="glass package">
+            <h3>VIPPlus</h3>
+            <div class="price">100 TL</div>
+            <p class="muted small">Özel kit + özel tag</p>
+          </div>
+          <div class="glass package">
+            <h3>PixelVIP</h3>
+            <div class="price">150 TL</div>
+            <p class="muted small">Özel kit + özel tag</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="iletisim">
+      <div class="grid">
+        <div class="glass card span-6">
+          <h2>Destek / İletişim</h2>
+          <form id="supportForm">
+            <input id="supportTitle" required placeholder="Konu" />
+            <textarea id="supportMsg" required placeholder="Sorununuzu yazın..."></textarea>
+            <button class="btn btn-primary" type="submit">Gönder</button>
+          </form>
+        </div>
+        <div class="glass card span-6">
+          <h2>Hesabım & Cevaplar</h2>
+          <p class="muted small">Giriş yaptığınız hesabınıza verilen yanıtlar burada görünür.</p>
+          <div id="myReplies" class="small"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="adminPanel" style="display:none">
+      <div class="glass card">
+        <h2>Admin Paneli</h2>
+        <p class="muted small">Başvurular ve destek talepleri. Yanıtlar kullanıcı hesabında görüntülenir.</p>
+        <div class="grid">
+          <div class="span-6">
+            <h3>Yetkili Başvuruları</h3>
+            <div id="adminStaffList"></div>
+          </div>
+          <div class="span-6">
+            <h3>Destek Talepleri</h3>
+            <div id="adminSupportList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer container">
+      © 2026 PixelCraft • Minecraft Topluluğu
+    </div>
+  </main>
+
+  <script>
+    const db = {
+      users: JSON.parse(localStorage.getItem("pc_users") || "{}"),
+      staffApps: JSON.parse(localStorage.getItem("pc_staffApps") || "[]"),
+      support: JSON.parse(localStorage.getItem("pc_support") || "[]"),
+      session: JSON.parse(localStorage.getItem("pc_session") || "null"),
+      adminSession: localStorage.getItem("pc_admin") === "1"
+    };
+    const save = () => {
+      localStorage.setItem("pc_users", JSON.stringify(db.users));
+      localStorage.setItem("pc_staffApps", JSON.stringify(db.staffApps));
+      localStorage.setItem("pc_support", JSON.stringify(db.support));
+      localStorage.setItem("pc_session", JSON.stringify(db.session));
+      localStorage.setItem("pc_admin", db.adminSession ? "1" : "0");
+    };
+
+    document.getElementById("copyIpBtn").onclick = async () => {
+      try{
+        await navigator.clipboard.writeText(document.getElementById("serverIp").textContent);
+        alert("IP kopyalandı!");
+      }catch{ alert("Kopyalanamadı."); }
+    };
+
+    document.querySelectorAll(".faq-q").forEach(btn=>{
+      btn.onclick=()=> {
+        const a=btn.nextElementSibling;
+        a.style.display=a.style.display==="block"?"none":"block";
+      };
+    });
+
+    function currentUser(){ return db.session && db.users[db.session.nick] ? db.session.nick : null; }
+
+    function renderAuthState(){
+      const el = document.getElementById("authState");
+      const nick = currentUser();
+      el.textContent = nick ? `Giriş yapıldı: ${nick}` : "Henüz giriş yapılmadı.";
+      renderMyReplies();
+    }
+
+    document.getElementById("authForm").addEventListener("submit",(e)=>{
+      e.preventDefault();
+      const nick = document.getElementById("authNick").value.trim();
+      const pass = document.getElementById("authPass").value;
+      if(!nick || !pass) return;
+
+      if(!db.users[nick]){
+        db.users[nick] = { pass };
+        db.session = { nick };
+        alert("Hesap oluşturuldu ve giriş yapıldı.");
+      } else {
+        if(db.users[nick].pass !== pass){
+          alert("Bu nick için şifre hatalı. Aynı nick aynı şifre ile giriş yapmalıdır.");
+          return;
+        }
+        db.session = { nick };
+        alert("Giriş başarılı.");
+      }
+      save(); renderAuthState();
+    });
+
+    document.getElementById("adminForm").addEventListener("submit",(e)=>{
+      e.preventDefault();
+      const n = document.getElementById("adminNick").value.trim();
+      const p = document.getElementById("adminPass").value;
+      if(n==="PixelCraft" && p==="pixel123123"){
+        db.adminSession = true;
+        save();
+        document.getElementById("adminPanel").style.display="block";
+        renderAdmin();
+        alert("Admin girişi başarılı.");
+      } else alert("Admin bilgileri hatalı.");
+    });
+
+    document.getElementById("staffForm").addEventListener("submit",(e)=>{
+      e.preventDefault();
+      const nick = currentUser();
+      if(!nick){ alert("Başvuru için önce giriş yapmalısın."); return; }
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      db.staffApps.push({ id:Date.now(), owner:nick, data, reply:"" });
+      save();
+      e.target.reset();
+      alert("Başvuru gönderildi.");
+      renderAdmin();
+    });
+
+    document.getElementById("supportForm").addEventListener("submit",(e)=>{
+      e.preventDefault();
+      const nick = currentUser();
+      if(!nick){ alert("Destek talebi için önce giriş yapmalısın."); return; }
+      db.support.push({
+        id:Date.now(),
+        owner:nick,
+        title:document.getElementById("supportTitle").value.trim(),
+        msg:document.getElementById("supportMsg").value.trim(),
+        reply:""
+      });
+      save();
+      e.target.reset();
+      alert("Destek talebin gönderildi.");
+      renderAdmin();
+      renderMyReplies();
+    });
+
+    function renderMyReplies(){
+      const box = document.getElementById("myReplies");
+      const nick = currentUser();
+      if(!nick){ box.innerHTML = "<p class='muted'>Giriş yapınca cevaplar burada görünür.</p>"; return; }
+
+      const staff = db.staffApps.filter(x=>x.owner===nick && x.reply);
+      const sup = db.support.filter(x=>x.owner===nick && x.reply);
+      if(!staff.length && !sup.length){ box.innerHTML = "<p class='muted'>Henüz yanıt yok.</p>"; return; }
+
+      box.innerHTML = "";
+      staff.forEach(s=>{
+        box.innerHTML += `<div class="glass card" style="margin-bottom:8px"><strong>Yetkili Başvurusu Yanıtı:</strong><br>${s.reply}</div>`;
+      });
+      sup.forEach(s=>{
+        box.innerHTML += `<div class="glass card" style="margin-bottom:8px"><strong>Destek (${s.title}) Yanıtı:</strong><br>${s.reply}</div>`;
+      });
+    }
+
+    function renderAdmin(){
+      if(!db.adminSession) return;
+      document.getElementById("adminPanel").style.display="block";
+
+      const sList = document.getElementById("adminStaffList");
+      const dList = document.getElementById("adminSupportList");
+
+      sList.innerHTML = db.staffApps.length ? "" : "<p class='muted'>Başvuru yok.</p>";
+      db.staffApps.forEach(app=>{
+        const wrap = document.createElement("div");
+        wrap.className = "glass card";
+        wrap.style.marginBottom="10px";
+        wrap.innerHTML = `
+          <div class="small muted">Kullanıcı: ${app.owner}</div>
+          <pre style="white-space:pre-wrap;color:#cbd5e1">${Object.entries(app.data).map(([k,v])=>`${k}: ${v}`).join("\n")}</pre>
+          <textarea placeholder="Yanıt yaz...">${app.reply || ""}</textarea>
+          <button class="btn btn-secondary small">Yanıtı Kaydet</button>
+        `;
+        wrap.querySelector("button").onclick=()=>{
+          app.reply = wrap.querySelector("textarea").value.trim();
+          save();
+          alert("Yanıt kaydedildi.");
+          renderMyReplies();
+        };
+        sList.appendChild(wrap);
+      });
+
+      dList.innerHTML = db.support.length ? "" : "<p class='muted'>Talep yok.</p>";
+      db.support.forEach(t=>{
+        const wrap = document.createElement("div");
+        wrap.className = "glass card";
+        wrap.style.marginBottom="10px";
+        wrap.innerHTML = `
+          <div><strong>${t.title}</strong> <span class="small muted">(${t.owner})</span></div>
+          <p>${t.msg}</p>
+          <textarea placeholder="Yanıt yaz...">${t.reply || ""}</textarea>
+          <button class="btn btn-secondary small">Yanıtı Kaydet</button>
+        `;
+        wrap.querySelector("button").onclick=()=>{
+          t.reply = wrap.querySelector("textarea").value.trim();
+          save();
+          alert("Yanıt kaydedildi.");
+          renderMyReplies();
+        };
+        dList.appendChild(wrap);
+      });
+    }
+
+    renderAuthState();
+    if(db.adminSession) renderAdmin();
+  </script>
+</body>
+</html>
